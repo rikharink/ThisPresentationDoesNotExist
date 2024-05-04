@@ -1,12 +1,17 @@
 using Serilog;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
+using OnnxStack.Core.Config;
+using OnnxStack.StableDiffusion.Config;
+using OnnxStack.StableDiffusion.Enums;
+using OnnxStack.StableDiffusion.Pipelines;
 using ThisPresentationDoesNotExist.Extensions;
 using ThisPresentationDoesNotExist.Models;
 using ThisPresentationDoesNotExist.Repositories;
 using ThisPresentationDoesNotExist.Repositories.Implementations;
 using ThisPresentationDoesNotExist.Services;
 using ThisPresentationDoesNotExist.Services.Implementations;
+using ThisPresentationDoesNotExist.Settings;
 
 async Task PreloadImages(IServiceProvider appServices)
 {
@@ -20,14 +25,14 @@ var builder = WebApplication.CreateBuilder(args);
 try
 {
     Log.Information("Starting web application");
-    builder.Services.AddLLama(builder.Configuration.GetRequiredSection(nameof(ThisPresentationDoesNotExist.Settings.LLama))
+    builder.Services.AddLLama(builder.Configuration
+        .GetRequiredSection(nameof(ThisPresentationDoesNotExist.Settings.LLama))
         .Get<ThisPresentationDoesNotExist.Settings.LLama>()!);
-    builder.Services.AddHttpClient<IImageGenerationService, SdWebUiImageGenerationService>(client =>
-    {
-        client.Timeout = TimeSpan.FromMinutes(5);
-        client.BaseAddress = new Uri(builder.Configuration["SdWebUiUrl"] ?? "http://127.0.0.1:7860");
-    });
+    builder.Services.AddStableDiffusionPipeline(builder.Configuration.GetRequiredSection("StableDiffusion")
+        .Get<StableDiffusion>()!);
+
     builder.Services.AddSingleton<IPromptRepository, JsonPromptRepository>();
+    builder.Services.AddSingleton<IImageGenerationService, StableDiffusionImageGenerationService>();
     builder.Services.AddSingleton<ISlideImageRepository, CachingSlideImageRepository>();
     builder.Services.AddSingleton<IChatContextRepository, MemoryChatContextRepository>();
     builder.Services.AddSingleton<ISlideGenerationService, OllamaSlideGenerationService>();
