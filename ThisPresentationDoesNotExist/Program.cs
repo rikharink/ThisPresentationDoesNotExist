@@ -28,11 +28,16 @@ try
     builder.Services.AddLLama(builder.Configuration
         .GetRequiredSection(nameof(ThisPresentationDoesNotExist.Settings.LLama))
         .Get<ThisPresentationDoesNotExist.Settings.LLama>()!);
-    builder.Services.AddStableDiffusionPipeline(builder.Configuration.GetRequiredSection("StableDiffusion")
-        .Get<StableDiffusion>()!);
-
+    
+    var stableDiffusionSettings = builder.Configuration.GetRequiredSection("StableDiffusion").Get<StableDiffusion>()!;
+    // builder.Services.AddStableDiffusionPipeline(stableDiffusionSettings);
+    // builder.Services.AddSingleton<IImageGenerationService, StableDiffusionImageGenerationService>();
+    builder.Services.AddHttpClient<IImageGenerationService, StableDiffusionWebUiImageGenerationService>(client =>
+    {
+        client.BaseAddress = stableDiffusionSettings.WebUiUrl;
+    });
+    
     builder.Services.AddSingleton<IPromptRepository, JsonPromptRepository>();
-    builder.Services.AddSingleton<IImageGenerationService, StableDiffusionImageGenerationService>();
     builder.Services.AddSingleton<ISlideImageRepository, CachingSlideImageRepository>();
     builder.Services.AddSingleton<IChatContextRepository, MemoryChatContextRepository>();
     builder.Services.AddSingleton<ISlideGenerationService, OllamaSlideGenerationService>();
