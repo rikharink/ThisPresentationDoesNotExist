@@ -17,34 +17,25 @@
 </footer>
 <script src="/js/signalr/dist/browser/signalr.js"></script>
 <script type="module">
-    
     import {Slide} from "./js/slide.js";
-
-    const connection = new signalR.HubConnectionBuilder()
-        .withUrl("/presentationHub")
-        .build();
-
-    connection.on("ReceiveSpeechToText", async (message) => {
-        console.log(message);
-    });
-
-    connection.start().catch(function (err) {
-        return console.error(err.toString());
-    });
-
     let id = parseInt(window.location.pathname.split("/").pop());
     let slide = new Slide(id);
-    await slide.init();
-
+    
+    await slide.update(id);
+    
     document.addEventListener("keyup", (event) => {
-        const nextSlide = () => window.location.href = `/${id + 1}`;
-        const prevSlide = () => {
+        const nextSlide = async () => {
+            id++;
+            await slide.update(id);
+        };
+        const prevSlide = async () => {
             if (id === 1) {
                 return;
             }
-            window.location.href = `/${id - 1}`;
+            id--;
+            await slide.update(id);
         }
-        console.log(event.key);
+
         if (event.key === "ArrowRight") {
             nextSlide();
         } else if (event.key === "ArrowLeft") {

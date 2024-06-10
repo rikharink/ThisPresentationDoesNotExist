@@ -3,6 +3,7 @@ import {
   fetchSlideImageByPrompt,
 } from "./slide-repository.js";
 
+import { connection } from "./connection.js";
 import { debounce } from "./util.js";
 import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
 
@@ -40,6 +41,17 @@ export class Slide {
       }
     }
   }
+  
+  async update(id, shouldSync = true) {
+    this.id = id;
+    history.pushState({}, null, id);
+    
+    if (shouldSync) {
+      await connection.invoke("SyncSlide", id);
+    }
+    
+    await this.init();
+  }
 
   async init() {
     this.prompts = await fetchSlidePromptsById(this.id);
@@ -47,10 +59,16 @@ export class Slide {
 
     if (this.prompts.imagePrompt) {
       this.imagePromptInput.innerText = this.prompts.imagePrompt.positive;
+    } else {
+      this.imagePromptInput.innerText = "";
+      this.slideImage.innerHTML = "";
     }
     
     if (this.prompts.textPrompt) {
       this.textPromptInput.innerText = this.prompts.textPrompt;
+    } else {
+      this.textPromptInput.innerText = "";
+      this.slideContent.innerHTML = "";
     }
     
     this.refreshSplit();
@@ -93,10 +111,7 @@ export class Slide {
           break;
         }
         this.text += value;
-        const markdown = marked.parse(this.text);
-        console.log(this.text);
-        console.log(markdown);
-        this.slideContent.innerHTML = markdown;
+        this.slideContent.innerHTML = marked.parse(this.text);
       }
     });
     this.refreshSplit();

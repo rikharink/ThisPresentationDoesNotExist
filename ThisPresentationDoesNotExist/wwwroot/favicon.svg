@@ -1,11 +1,16 @@
-<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-  <title>LLM Presentation Favicon</title>
-  <circle cx="50" cy="50" r="30" stroke="blue" stroke-width="3" fill="transparent"/>
-  <path d="M 35,35 Q 50,20 65,35" stroke="blue" stroke-width="2" fill="none"/>
-  <path d="M 35,65 Q 50,80 65,65" stroke="blue" stroke-width="2" fill="none"/>
-  <path d="M 35,35 Q 20,50 35,65" stroke="blue" stroke-width="2" fill="none"/>
-  <path d="M 65,35 Q 80,50 65,65" stroke="blue" stroke-width="2" fill="none"/>
-  <rect x="30" y="45" width="40" height="10" fill="blue"/>
-  <circle cx="75" cy="25" r="5" fill="blue"/>
-  <path d="M 75,30 Q 75,40 65,40" stroke="blue" stroke-width="2" fill="none"/>
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient x1="12.3524" y1="-2.53072" x2="96.6476" y2="475.531" gradientUnits="userSpaceOnUse" spreadMethod="reflect" id="fill2">
+      <stop offset="0" stop-color="#F19A13" />
+      <stop offset="0.33" stop-color="#E73F42" />
+      <stop offset="0.66" stop-color="#982A7C" />
+      <stop offset="0.99" stop-color="#00A0E3" />
+      <stop offset="1" stop-color="#00A0E3" />
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke="#000" stroke-width="2">
+    <path fill="url(#fill2)" d="M32,2c9.94,0,18,8.06,18,18c0,5.35-2.1,9.68-5.53,13c-0.19,0.18-0.29,0.42-0.29,0.71V38h-2v6h-3v5h-4v5h2v2H28v-2h2v-5h-4v-5h-3v-6h-2v-3.68c0-0.29-0.1-0.53-0.29-0.71C16.1,29.68,14,25.35,14,20C14,10.06,22.06,2,32,2z"/>
+    <path fill="url(#fill2)" d="M44,20c0,4.41-1.61,7.94-4.76,11H24.76C21.61,27.94,20,24.41,20,20c0-6.63,5.37-12,12-12S44,13.37,44,20z"/>
+    <path fill="url(#fill2)" d="M32,48c-3.86,0-7-3.14-7-7h14C39,44.86,35.86,48,32,48z"/>
+  </g>
 </svg>

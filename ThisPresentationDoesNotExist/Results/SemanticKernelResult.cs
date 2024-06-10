@@ -16,7 +16,7 @@ public class SemanticKernelResult(Kernel kernel, ChatHistory history, string use
             ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
             Temperature = 0.8
         };
-        
+       
         history.AddUserMessage(userMessage);
         
         httpContext.Response.ContentType = "text/plain";

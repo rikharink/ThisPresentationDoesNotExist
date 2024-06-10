@@ -11,10 +11,20 @@ public class JsonPromptRepository : IPromptRepository
         if (slide < 1 || slide > prompts.Length)
         {
             return new Prompt(
-                "Generate a slide summarizing why this slide does not exist (yet). The title for this specific slide should be: 404 - This Slide Does Not Exist. Please think of some funny reasons why the slide doesn't exist yet and include those as bullet points.");
+                "Please summarize some funny reasons why the slide doesn't exist yet and title it: 404 - This Slide Does Not Exist.");
         }
 
         return prompts[slide - 1];
+    }
+    
+    public string GetNotes(int slide)
+    {
+        var prompts = GetPrompts().ToArray();
+        if (slide < 1 || slide > prompts.Length)
+        {
+            return string.Empty;
+        }
+        return prompts[slide - 1].Notes;
     }
 
     public IEnumerable<Prompt> GetPrompts()

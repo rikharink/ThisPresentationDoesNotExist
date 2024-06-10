@@ -51,6 +51,8 @@ try
     app.UseDefaultFiles();
     app.UseStaticFiles();
 
+    app.MapGet("/api/slide/{id:int}/notes", (int id) => Results.Ok(app.Services.GetRequiredService<IPromptRepository>().GetNotes(id)));
+    
     app.MapGet("/api/slide/{id:int}/prompts",
         (int id) => Results.Ok(app.Services.GetRequiredService<IPromptRepository>().GetPrompt(id)));
 
@@ -66,10 +68,13 @@ try
             return Results.File(img, "image/png");
         });
 
-    app.MapGet("/api/slide/text/reset", () => { return Results.Ok(); });
+    app.MapGet("/api/slide/text/reset", () =>
+    {
+        app.Services.GetRequiredService<ISlideGenerationService>().ResetHistory();
+        return Results.Ok();
+    });
 
     app.MapHub<PresentationHub>("/presentationHub");
-
     app.Run();
 }
 catch (Exception ex)

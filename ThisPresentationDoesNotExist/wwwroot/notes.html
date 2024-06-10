@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>THIS PRESENTATION DOES NOT EXIST - NOTES</title>
+    <link rel="icon" href="favicon.svg"/>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div id="slide">
+    <div id="notes-content">
+    </div>
+</div>
+<script src="/js/signalr/dist/browser/signalr.js"></script>
+<script type="module">
+    import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+    import { connection } from "./js/connection.js";
+    import { fetchSlideNotesById } from "./js/slide-repository.js";
+    
+    async function updateNotes(id) {
+        document.title = `SLIDE ${id} NOTES`;
+        document.getElementById("notes-content").innerHTML = marked.parse(await fetchSlideNotesById(id))    
+    }
+    
+    connection.on("GotoSlide", async function (newSlide) {
+        id = newSlide;
+        await updateNotes(id);
+    });
+
+    let id = 1;
+    await updateNotes(id);
+</script>
+</body>
+</html>

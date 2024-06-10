@@ -1,3 +1,9 @@
+export async function fetchSlideNotesById(id) {
+  return await fetch(`/api/slide/${id}/notes`).then((response) =>
+    response.json()
+  );
+}
+
 export async function fetchSlidePromptsById(id) {
   return await fetch(`/api/slide/${id}/prompts`).then((response) =>
     response.json()

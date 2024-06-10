@@ -8,4 +8,9 @@ public class PresentationHub : Hub
     {
         await Clients.All.SendAsync("Pong", user, message);
     }
+    
+    public async Task SyncSlide(int slide)
+    {
+        await Clients.Others.SendAsync("GotoSlide", slide);
+    }
 }
