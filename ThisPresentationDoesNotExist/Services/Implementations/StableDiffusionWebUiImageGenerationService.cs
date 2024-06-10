@@ -31,4 +31,16 @@ public class StableDiffusionWebUiImageGenerationService(HttpClient client) : IIm
         }
         return Convert.FromBase64String(txt2ImgResponse.Images[0]);
     }
+
+    public Task LoadPipelineAsync()
+    {
+        //NOOP
+        return Task.CompletedTask;
+    }
+
+    public Task UnloadPipelineAsync()
+    {
+        //NOOP
+        return Task.CompletedTask;
+    }
 }

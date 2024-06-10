@@ -2,10 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThisPresentationDoesNotExist", "ThisPresentationDoesNotExist\ThisPresentationDoesNotExist.csproj", "{174F97B3-B162-467E-9A8A-5C1DBE218BB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LLamaSharp", "..\..\tools\LLamaSharp\LLama\LLamaSharp.csproj", "{E78AD25C-6668-4D28-A814-BA846800F05A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LLamaSharp.SemanticKernel", "..\..\tools\LLamaSharp\LLama.SemanticKernel\LLamaSharp.SemanticKernel.csproj", "{FE2C44A6-2901-4662-A5F3-0A3AADF56B62}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,17 +15,5 @@ Global
 		{174F97B3-B162-467E-9A8A-5C1DBE218BB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{174F97B3-B162-467E-9A8A-5C1DBE218BB2}.Debug|x64.ActiveCfg = Debug|x64
 		{174F97B3-B162-467E-9A8A-5C1DBE218BB2}.Debug|x64.Build.0 = Debug|x64
-		{E78AD25C-6668-4D28-A814-BA846800F05A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E78AD25C-6668-4D28-A814-BA846800F05A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E78AD25C-6668-4D28-A814-BA846800F05A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E78AD25C-6668-4D28-A814-BA846800F05A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E78AD25C-6668-4D28-A814-BA846800F05A}.Debug|x64.ActiveCfg = Debug|x64
-		{E78AD25C-6668-4D28-A814-BA846800F05A}.Debug|x64.Build.0 = Debug|x64
-		{FE2C44A6-2901-4662-A5F3-0A3AADF56B62}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE2C44A6-2901-4662-A5F3-0A3AADF56B62}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FE2C44A6-2901-4662-A5F3-0A3AADF56B62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE2C44A6-2901-4662-A5F3-0A3AADF56B62}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE2C44A6-2901-4662-A5F3-0A3AADF56B62}.Debug|x64.ActiveCfg = Debug|x64
-		{FE2C44A6-2901-4662-A5F3-0A3AADF56B62}.Debug|x64.Build.0 = Debug|x64
 	EndGlobalSection
 EndGlobal

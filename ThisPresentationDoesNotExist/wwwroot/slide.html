@@ -1,42 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <title>THIS PRESENTATION DOES NOT EXIST</title>
-    <link rel="icon" href="favicon.svg" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div id="slide" class="split">
-      <div id="slide-content">
-      </div>
-      <div id="slide-image"></div>
+    <link rel="icon" href="favicon.svg"/>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div id="slide" class="split">
+    <div id="slide-content">
     </div>
-    <footer id="prompt-editor" class="hidden">
-      <div id="text-prompt" class="textarea" contenteditable="true"></div>
-      <div id="image-prompt" class="textarea" contenteditable="true"></div>
-    </footer>
-    <script type="module">
-      import { Slide } from "./js/slide.js"; 
+    <div id="slide-image"></div>
+</div>
+<footer id="prompt-editor" class="hidden">
+    <div id="text-prompt" class="textarea" contenteditable="true"></div>
+    <div id="image-prompt" class="textarea" contenteditable="true"></div>
+</footer>
+<script src="/js/signalr/dist/browser/signalr.js"></script>
+<script type="module">
+    
+    import {Slide} from "./js/slide.js";
 
-      let id = parseInt(window.location.pathname.split("/").pop());
-      let slide = new Slide(id);
-      await slide.init();
-      
-      document.addEventListener("keyup", (event) => {
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/presentationHub")
+        .build();
+
+    connection.on("ReceiveSpeechToText", async (message) => {
+        console.log(message);
+    });
+
+    connection.start().catch(function (err) {
+        return console.error(err.toString());
+    });
+
+    let id = parseInt(window.location.pathname.split("/").pop());
+    let slide = new Slide(id);
+    await slide.init();
+
+    document.addEventListener("keyup", (event) => {
         const nextSlide = () => window.location.href = `/${id + 1}`;
         const prevSlide = () => {
-          if (id === 1) {
-            return;
-          }
-          window.location.href = `/${id - 1}`;
+            if (id === 1) {
+                return;
+            }
+            window.location.href = `/${id - 1}`;
         }
         console.log(event.key);
         if (event.key === "ArrowRight") {
-          nextSlide();
+            nextSlide();
         } else if (event.key === "ArrowLeft") {
-          prevSlide();
+            prevSlide();
         }
-      });
-    </script>
-  </body>
+    });
+</script>
+</body>
 </html>

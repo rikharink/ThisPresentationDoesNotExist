@@ -1,11 +1,8 @@
 using Serilog;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
-using OnnxStack.Core.Config;
-using OnnxStack.StableDiffusion.Config;
-using OnnxStack.StableDiffusion.Enums;
-using OnnxStack.StableDiffusion.Pipelines;
 using ThisPresentationDoesNotExist.Extensions;
+using ThisPresentationDoesNotExist.Hubs;
 using ThisPresentationDoesNotExist.Models;
 using ThisPresentationDoesNotExist.Repositories;
 using ThisPresentationDoesNotExist.Repositories.Implementations;
@@ -26,23 +23,21 @@ try
 {
     Log.Information("Starting web application");
     builder.Services.AddLLama(builder.Configuration
-        .GetRequiredSection(nameof(ThisPresentationDoesNotExist.Settings.LLama))
-        .Get<ThisPresentationDoesNotExist.Settings.LLama>()!);
-    
+        .GetRequiredSection(nameof(LLama))
+        .Get<LLama>()!);
+
     var stableDiffusionSettings = builder.Configuration.GetRequiredSection("StableDiffusion").Get<StableDiffusion>()!;
-    // builder.Services.AddStableDiffusionPipeline(stableDiffusionSettings);
-    // builder.Services.AddSingleton<IImageGenerationService, StableDiffusionImageGenerationService>();
     builder.Services.AddHttpClient<IImageGenerationService, StableDiffusionWebUiImageGenerationService>(client =>
     {
         client.BaseAddress = stableDiffusionSettings.WebUiUrl;
     });
-    
+
     builder.Services.AddSingleton<IPromptRepository, JsonPromptRepository>();
     builder.Services.AddSingleton<ISlideImageRepository, CachingSlideImageRepository>();
-    builder.Services.AddSingleton<IChatContextRepository, MemoryChatContextRepository>();
-    builder.Services.AddSingleton<ISlideGenerationService, OllamaSlideGenerationService>();
+    builder.Services.AddSingleton<ISlideGenerationService, SemanticKernelSlideGenerationService>();
     builder.Services.AddControllers();
     builder.Services.AddSerilog();
+    builder.Services.AddSignalR();
 
     var app = builder.Build();
     app.UseHttpsRedirection();
@@ -71,11 +66,9 @@ try
             return Results.File(img, "image/png");
         });
 
-    app.MapGet("/api/slide/text/reset", () =>
-    {
-        app.Services.GetRequiredService<IChatContextRepository>().Reset();
-        return Results.Ok();
-    });
+    app.MapGet("/api/slide/text/reset", () => { return Results.Ok(); });
+
+    app.MapHub<PresentationHub>("/presentationHub");
 
     app.Run();
 }

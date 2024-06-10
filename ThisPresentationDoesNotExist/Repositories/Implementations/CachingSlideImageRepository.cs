@@ -10,6 +10,9 @@ public class CachingSlideImageRepository(
     IImageGenerationService imageGenerationService) : ISlideImageRepository
 {
     private readonly Dictionary<ImagePrompt, byte[]> _imageCache = new();
+
+    private bool _isPipelineLoaded = false;
+
     public async Task PreloadImages()
     {
         var imagePrompts = promptRepository.GetImagePrompts().ToList();
@@ -36,8 +39,13 @@ public class CachingSlideImageRepository(
             _imageCache[prompt] = image!;
             imageCount++;
         }
+
+        if (_isPipelineLoaded)
+        {
+            await imageGenerationService.UnloadPipelineAsync();
+        }
     }
-    
+
     public async Task<byte[]> GetImage(ImagePrompt prompt)
     {
         if (_imageCache.TryGetValue(prompt, out var image))
@@ -47,6 +55,12 @@ public class CachingSlideImageRepository(
         }
 
         logger.LogInformation("Image not found in cache, generating image for prompt: {Prompt}", prompt);
+        if (!_isPipelineLoaded)
+        {
+            await imageGenerationService.LoadPipelineAsync();
+            _isPipelineLoaded = true;
+        }
+
         image = await imageGenerationService.GenerateImageAsync(prompt);
         _imageCache[prompt] = image;
         return image;

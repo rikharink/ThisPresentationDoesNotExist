@@ -6,12 +6,13 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="wrapper">
+    <div id="title" class="wrapper">
       <div class="container">
         <h1 contenteditable="true">404</h1>
         <p contenteditable="true">this presentation does not exist</p>
       </div>
     </div>
+    <script src="/js/signalr/dist/browser/signalr.js"></script>
     <script type="text/javascript">
       const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {

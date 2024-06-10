@@ -16,8 +16,7 @@
       "launchUrl": "",
       "applicationUrl": "http://localhost:5200",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "LD_LIBRARY_PATH": "/opt/cuda-11.7/lib64:/opt/cuda-11.7/lib"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "https": {
