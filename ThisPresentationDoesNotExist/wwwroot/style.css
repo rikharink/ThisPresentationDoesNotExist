@@ -171,3 +171,17 @@ thinking {
 code {
   text-wrap: balance;
 }
+
+.zoomer {
+  border: 10px solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(to right, #005eff, #7d0b85, #f14240, #ff9e00);
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+.right {
+  left: unset;
+  right: 20px;
+}

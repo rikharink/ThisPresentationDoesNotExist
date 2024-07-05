@@ -1,36 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <title>404 - THIS PRESENTATION DOES NOT EXIST</title>
-    <link rel="icon" href="favicon.svg" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div id="title" class="wrapper">
-      <div class="container">
+    <link rel="icon" href="favicon.svg"/>
+    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="/js/clippyjs/assets/clippy.css"/>
+</head>
+<body>
+<div id="title" class="wrapper">
+    <div class="container">
         <h1 contenteditable="true">404</h1>
         <p contenteditable="true">this presentation does not exist</p>
-      </div>
     </div>
-    <script src="/js/signalr/dist/browser/signalr.js"></script>
-    <script type="text/javascript">
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          console.log("mutation", mutation);
-          if (mutation.target.textContent.trim() === "200") {
-            window.location.href = "/1";
-          }
-        });
-      });
+</div>
+<script src="/js/jquery/dist/jquery.js"></script>
+<script src="/js/clippyjs/dist/clippy.js"></script>
+<script src="/js/signalr/dist/browser/signalr.js"></script>
+<script type="text/javascript">
+    window.CLIPPY_CDN = "/js/clippyjs/assets/agents/";
 
-      window.onload = () => {
-        observer.observe(document.querySelector("h1"), {
-          attributes: true,
-          childList: true,
-          subtree: true,
-          characterData: true,
+    function zoomerAttentionSpan() {
+        if (document.getElementById("zoomer")) {
+            document.getElementById("zoomer").remove();
+            return;
+        }
+        const video = document.createElement("video");
+        video.classList.add("zoomer");
+        video.width = 640;
+        video.src = "/subwaysurfers.webm";
+        video.autoplay = true;
+        video.loop = true;
+        video.id = "zoomer";
+        document.body.append(video);
+    }
+
+    function wouldYouLikeSomeHelp() {
+        window.removeEventListener("click", wouldYouLikeSomeHelp);
+        clippy.load("Clippy", function (agent) {
+            window.agent = agent;
+            let lines = [
+                "Je presentatie lijkt niet te bestaan! Zal ik je helpen een nieuwe te maken?",
+                "Verwijder anders not en pas de titel aan naar 200! Dan help ik je verder."
+            ];
+            agent.show();
+            agent.moveTo(window.innerWidth - 200, 50);
+            agent.animate();
+            $(agent._el).on("click", () => {
+
+                if (lines.length === 0) {
+                    agent.closeBalloon();
+                    agent.play("GoodBye");
+                    agent.hide();
+                    return;
+                }
+                agent.speak(lines.shift(), false);
+            });
         });
-      };
-    </script>
-  </body>
+    }
+
+    function keyboardShortcuts(e) {
+        if (e.key === "z") {
+            zoomerAttentionSpan();
+        }
+    }
+    
+    window.addEventListener("click", wouldYouLikeSomeHelp);
+    window.addEventListener("keyup", keyboardShortcuts);
+
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.target.textContent.trim() === "200") {
+                window.location.href = "/1";
+            }
+        });
+    });
+
+    window.onload = () => {
+        observer.observe(document.querySelector("h1"), {
+            attributes: true,
+            childList: true,
+            subtree: true,
+            characterData: true,
+        });
+    };
+</script>
+</body>
 </html>

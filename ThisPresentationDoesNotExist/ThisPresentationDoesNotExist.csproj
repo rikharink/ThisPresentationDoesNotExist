@@ -12,9 +12,6 @@
     <ItemGroup>
         <PackageReference Include="HarinkLib" Version="2024.5.22-ccd7a29" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.3" />
-        <PackageReference Include="Microsoft.SemanticKernel" Version="1.10.0" />
-        <PackageReference Include="Microsoft.SemanticKernel.PromptTemplates.Handlebars" Version="1.10.0" />
-        <PackageReference Include="Microsoft.SemanticKernel.Yaml" Version="1.10.0" />
         <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>
@@ -26,11 +23,16 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Extensions\" />
       <Folder Include="Plugins\" />
     </ItemGroup>
     
     <ItemGroup>
         <EmbeddedResource Include="Prompts\**\*.yaml" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\ThisPresentationDoesNotExist.Core\ThisPresentationDoesNotExist.Core.csproj" />
     </ItemGroup>
 
 </Project>

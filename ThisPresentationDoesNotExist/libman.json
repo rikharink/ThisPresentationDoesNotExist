@@ -8,6 +8,14 @@
       "files": [
         "dist/browser/signalr.js"
       ]
+    },
+    {
+      "library": "clippyjs@0.0.3",
+      "destination": "wwwroot\\js\\clippyjs"
+    },
+    {
+      "library": "jquery@3.7.1",
+      "destination": "wwwroot\\js\\jquery"
     }
   ]
 }

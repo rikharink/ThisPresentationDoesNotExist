@@ -18,11 +18,36 @@
 <script src="/js/signalr/dist/browser/signalr.js"></script>
 <script type="module">
     import {Slide} from "./js/slide.js";
+
+    function zoomerAttentionSpan() {
+        if (document.getElementById("zoomer")) {
+            document.getElementById("zoomer").remove();
+            return;
+        }
+        const video = document.createElement("video");
+        video.classList.add("zoomer");
+        video.classList.add("right");
+        video.width = 640;
+        video.src = "/subwaysurfers.webm";
+        video.autoplay = true;
+        video.loop = true;
+        video.id = "zoomer";
+        document.body.append(video);
+    }
+
+    function keyboardShortcuts(e) {
+        if (e.key === "z") {
+            zoomerAttentionSpan();
+        }
+    }
+
+    window.addEventListener("keyup", keyboardShortcuts);
+
     let id = parseInt(window.location.pathname.split("/").pop());
     let slide = new Slide(id);
-    
+
     await slide.update(id);
-    
+
     document.addEventListener("keyup", (event) => {
         const nextSlide = async () => {
             id++;

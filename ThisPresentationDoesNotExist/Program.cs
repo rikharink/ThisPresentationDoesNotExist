@@ -1,14 +1,12 @@
 using Serilog;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
-using ThisPresentationDoesNotExist.Extensions;
 using ThisPresentationDoesNotExist.Hubs;
 using ThisPresentationDoesNotExist.Models;
 using ThisPresentationDoesNotExist.Repositories;
-using ThisPresentationDoesNotExist.Repositories.Implementations;
+using ThisPresentationDoesNotExist.Results;
 using ThisPresentationDoesNotExist.Services;
-using ThisPresentationDoesNotExist.Services.Implementations;
-using ThisPresentationDoesNotExist.Settings;
+using ThisPresentationDoesNotExist.Core.Extensions;
 
 async Task PreloadImages(IServiceProvider appServices)
 {
@@ -22,21 +20,8 @@ var builder = WebApplication.CreateBuilder(args);
 try
 {
     Log.Information("Starting web application");
-    builder.Services.AddLLama(builder.Configuration
-        .GetRequiredSection(nameof(LLama))
-        .Get<LLama>()!);
-
-    var stableDiffusionSettings = builder.Configuration.GetRequiredSection("StableDiffusion").Get<StableDiffusion>()!;
-    builder.Services.AddHttpClient<IImageGenerationService, StableDiffusionWebUiImageGenerationService>(client =>
-    {
-        client.BaseAddress = stableDiffusionSettings.WebUiUrl;
-    });
-
-    builder.Services.AddSingleton<IPromptRepository, JsonPromptRepository>();
-    builder.Services.AddSingleton<ISlideImageRepository, CachingSlideImageRepository>();
-    builder.Services.AddSingleton<ISlideGenerationService, SemanticKernelSlideGenerationService>();
+    builder.Services.AddThisPresentationDoesNotExist(builder.Configuration);
     builder.Services.AddControllers();
-    builder.Services.AddSerilog();
     builder.Services.AddSignalR();
 
     var app = builder.Build();
@@ -51,14 +36,19 @@ try
     app.UseDefaultFiles();
     app.UseStaticFiles();
 
-    app.MapGet("/api/slide/{id:int}/notes", (int id) => Results.Ok(app.Services.GetRequiredService<IPromptRepository>().GetNotes(id)));
-    
+    app.MapGet("/api/slide/{id:int}/notes",
+        (int id) => Results.Ok(app.Services.GetRequiredService<IPromptRepository>().GetNotes(id)));
+
     app.MapGet("/api/slide/{id:int}/prompts",
-        (int id) => Results.Ok(app.Services.GetRequiredService<IPromptRepository>().GetPrompt(id)));
+        async (int id) => Results.Ok(await app.Services.GetRequiredService<IPromptRepository>().GetPrompt(id)));
 
     app.MapGet("/api/slide/text/{prompt}",
-        async (string prompt) =>
-            await app.Services.GetRequiredService<ISlideGenerationService>().GenerateSlide(prompt));
+        (string prompt) =>
+        {
+            var slideGenerationService = app.Services.GetRequiredService<ISlideGenerationService>();
+            return new SemanticKernelResult(slideGenerationService.GenerateSlide(prompt), slideGenerationService);
+        });
+
     app.MapGet("/api/slide/image/{positivePrompt}/{negativePrompt}",
         async (string positivePrompt, string negativePrompt = "", [FromQuery] int width = 1024,
             [FromQuery] int height = 1024, [FromQuery] int steps = 30) =>
